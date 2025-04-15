@@ -343,6 +343,8 @@ if test "$gcc" -eq 1 && ($cc $CFLAGS -c $test.c) >> configure.log 2>&1; then
       ARCH=powerpc64 ;;
     powerpc64le | ppc64le)
       ARCH=powerpc64le ;;
+    riscv64)
+      ARCH=riscv64 ;;
   esac
   CFLAGS="-O2 ${CFLAGS}"
   if test -n "${ARCHS}"; then
@@ -1964,6 +1966,39 @@ EOF
 
                 ARCH_STATIC_OBJS="${ARCH_STATIC_OBJS} compare256_power9.o"
                 ARCH_SHARED_OBJS="${ARCH_SHARED_OBJS} compare256_power9.lo"
+            fi
+        fi
+    ;;
+    riscv64)
+        [ ! -z $CROSS_PREFIX ] && QEMU_ARCH=riscv64
+        ARCHDIR=arch/riscv
+
+        if test $without_optimizations -eq 0; then
+            # Check for RVV (RISC-V Vector Extension) support
+            cat > $test.c << EOF
+#include <riscv_vector.h>
+void foo(void) {
+  size_t vl = __riscv_vsetvlmax_e8m1();
+  vuint8m1_t v = __riscv_vmv_v_x_u8m1(0, vl);
+}
+EOF
+            if try $CC -march=rv64gcv $CFLAGS $test.c -c $test; then
+                HAVE_RVV=1
+                echo "Check whether RISC-V Vector Extension (RVV) is available ... Yes." | tee -a configure.log
+                
+                CFLAGS="${CFLAGS} -DRISCV_FEATURES -DRISCV_RVV"
+                SFLAGS="${SFLAGS} -DRISCV_FEATURES -DRISCV_RVV"
+                
+                ARCH_STATIC_OBJS="${ARCH_STATIC_OBJS} riscv_features.o"
+                ARCH_SHARED_OBJS="${ARCH_SHARED_OBJS} riscv_features.lo"
+                
+                ARCH_STATIC_OBJS="${ARCH_STATIC_OBJS} adler32_rvv.o chunkset_rvv.o compare256_rvv.o slide_hash_rvv.o"
+                ARCH_SHARED_OBJS="${ARCH_SHARED_OBJS} adler32_rvv.lo chunkset_rvv.lo compare256_rvv.lo slide_hash_rvv.lo"
+                
+                ARCH="${ARCH}+rvv"
+            else
+                HAVE_RVV=0
+                echo "Check whether RISC-V Vector Extension (RVV) is available ... No." | tee -a configure.log
             fi
         fi
     ;;
