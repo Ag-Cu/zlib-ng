@@ -13,6 +13,8 @@ SRCDIR=.
 SRCTOP=../..
 TOPDIR=$(SRCTOP)
 
+RVVFLAG=
+
 all: \
 	riscv_features.o riscv_features.lo \
 	adler32_rvv.o adler32_rvv.lo \
@@ -21,34 +23,34 @@ all: \
 	slide_hash_rvv.o slide_hash_rvv.lo
 
 riscv_features.o: $(SRCDIR)/riscv_features.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $(SRCDIR)/riscv_features.c
+	$(CC) $(CFLAGS) $(RVVFLAG) $(INCLUDES) -c -o $@ $(SRCDIR)/riscv_features.c
 
 riscv_features.lo: $(SRCDIR)/riscv_features.c
-	$(CC) $(SFLAGS) -DPIC $(INCLUDES) -c -o $@ $(SRCDIR)/riscv_features.c
+	$(CC) $(SFLAGS) $(RVVFLAG) -DPIC $(INCLUDES) -c -o $@ $(SRCDIR)/riscv_features.c
 
 adler32_rvv.o: $(SRCDIR)/adler32_rvv.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $(SRCDIR)/adler32_rvv.c
+	$(CC) $(CFLAGS) $(RVVFLAG) $(INCLUDES) -c -o $@ $(SRCDIR)/adler32_rvv.c
 
 adler32_rvv.lo: $(SRCDIR)/adler32_rvv.c
-	$(CC) $(SFLAGS) -DPIC $(INCLUDES) -c -o $@ $(SRCDIR)/adler32_rvv.c
+	$(CC) $(SFLAGS) $(RVVFLAG) -DPIC $(INCLUDES) -c -o $@ $(SRCDIR)/adler32_rvv.c
 
 chunkset_rvv.o: $(SRCDIR)/chunkset_rvv.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $(SRCDIR)/chunkset_rvv.c
+	$(CC) $(CFLAGS) $(RVVFLAG) $(INCLUDES) -c -o $@ $(SRCDIR)/chunkset_rvv.c
 
 chunkset_rvv.lo: $(SRCDIR)/chunkset_rvv.c
-	$(CC) $(SFLAGS) -DPIC $(INCLUDES) -c -o $@ $(SRCDIR)/chunkset_rvv.c
+	$(CC) $(SFLAGS) $(RVVFLAG) -DPIC $(INCLUDES) -c -o $@ $(SRCDIR)/chunkset_rvv.c
 
 compare256_rvv.o: $(SRCDIR)/compare256_rvv.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $(SRCDIR)/compare256_rvv.c
+	$(CC) $(CFLAGS) $(RVVFLAG) $(INCLUDES) -c -o $@ $(SRCDIR)/compare256_rvv.c
 
 compare256_rvv.lo: $(SRCDIR)/compare256_rvv.c
-	$(CC) $(SFLAGS) -DPIC $(INCLUDES) -c -o $@ $(SRCDIR)/compare256_rvv.c
+	$(CC) $(SFLAGS) $(RVVFLAG) -DPIC $(INCLUDES) -c -o $@ $(SRCDIR)/compare256_rvv.c
 
 slide_hash_rvv.o: $(SRCDIR)/slide_hash_rvv.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $(SRCDIR)/slide_hash_rvv.c
+	$(CC) $(CFLAGS) $(RVVFLAG) $(INCLUDES) -c -o $@ $(SRCDIR)/slide_hash_rvv.c
 
 slide_hash_rvv.lo: $(SRCDIR)/slide_hash_rvv.c
-	$(CC) $(SFLAGS) -DPIC $(INCLUDES) -c -o $@ $(SRCDIR)/slide_hash_rvv.c
+	$(CC) $(SFLAGS) $(RVVFLAG) -DPIC $(INCLUDES) -c -o $@ $(SRCDIR)/slide_hash_rvv.c
 
 mostlyclean: clean
 clean:

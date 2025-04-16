@@ -2031,8 +2031,8 @@ EOF
           check_rvv_compiler_flag
     
               if test $HAVE_RVV_INTRIN -eq 1; then
-                  CFLAGS="${CFLAGS} -DRISCV_FEATURES -DRISCV_RVV ${rvvflag}"
-                  SFLAGS="${SFLAGS} -DRISCV_FEATURES -DRISCV_RVV ${rvvflag}"
+                  CFLAGS="${CFLAGS} -DRISCV_FEATURES -DRISCV_RVV"
+                  SFLAGS="${SFLAGS} -DRISCV_FEATURES -DRISCV_RVV"
               
                   ARCH_STATIC_OBJS="${ARCH_STATIC_OBJS} riscv_features.o"
                   ARCH_SHARED_OBJS="${ARCH_SHARED_OBJS} riscv_features.lo"
@@ -2296,6 +2296,7 @@ sed < $SRCDIR/$ARCHDIR/Makefile.in "
 /^NOLTOFLAG *=/s#=.*#=$noltoflag#
 /^VGFMAFLAG *=/s#=.*#=$vgfmaflag#
 /^PPCFLAGS *=/s#=.*#=$vmxflag#
+/^RVVFLAG *=/s#=.*#=$rvvflag#
 " > $ARCHDIR/Makefile
 
 # Append header files dependencies.
