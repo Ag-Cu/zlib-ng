@@ -269,6 +269,26 @@ INSTANTIATE_TEST_SUITE_P(crc32_alignment, crc32_align, testing::ValuesIn(align_o
 TEST_CRC32(armv8, crc32_armv8, test_cpu_features.arm.has_crc32)
 TEST_CRC32_ALIGN(armv8_align, crc32_armv8, test_cpu_features.arm.has_crc32)
 #endif
+
+#ifdef RISCV_CRC32
+static const int align_offsets[] = {
+    1, 2, 3, 4, 5, 6, 7
+};
+
+#define TEST_CRC32_ALIGN(name, func, support_flag) \
+    TEST_P(crc32_align, name) { \
+        if (!(support_flag)) { \
+            GTEST_SKIP(); \
+            return; \
+        } \
+        hash(GetParam(), func); \
+    }
+
+// INSTANTIATE_TEST_SUITE_P(crc32_alignment, crc32_align, testing::ValuesIn(align_offsets));
+TEST_CRC32(riscv, crc32_riscv64_zbc, test_cpu_features.riscv.has_crc32)
+// TEST_CRC32_ALIGN(riscv_align, crc32_riscv64_zbc, test_cpu_features.riscv.has_crc32)
+#endif
+
 #ifdef POWER8_VSX_CRC32
 TEST_CRC32(power8, crc32_power8, test_cpu_features.power.has_arch_2_07)
 #endif

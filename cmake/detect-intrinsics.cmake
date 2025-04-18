@@ -458,6 +458,29 @@ macro(check_rvv_intrinsics)
     set(CMAKE_REQUIRED_FLAGS)
 endmacro()
 
+macro(check_riscv_zbc_intrinsics)
+    if(NOT NATIVEFLAG)
+        if(CMAKE_C_COMPILER_ID MATCHES "GNU" OR CMAKE_C_COMPILER_ID MATCHES "Clang")
+            set(RISCVZBCFLAG "-march=rv64gc_zbc")
+        endif()
+    endif()
+    # Check whether compiler supports RISC-V Zbc (Carry-Less multiply) extension
+    set(CMAKE_REQUIRED_FLAGS "${RISCVZBCFLAG} ${NATIVEFLAG} ${ZNOLTOFLAG}")
+    check_c_source_compiles(
+        "#include <riscv_bitmanip.h>
+        uint64_t f(uint64_t a, uint64_t b) {
+            return __riscv_clmul_64(a, b);
+        }
+        int main(void) {
+            uint64_t x = 0x1234567890ABCDEF;
+            uint64_t y = 0xFEDCBA0987654321;
+            return (int)f(x, y);
+        }"
+        HAVE_RISCV_ZBC_INTRIN
+    )
+    set(CMAKE_REQUIRED_FLAGS)
+endmacro()
+
 macro(check_s390_intrinsics)
     check_c_source_compiles(
         "#include <sys/auxv.h>
